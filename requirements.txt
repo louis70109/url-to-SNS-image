@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+gunicorn
+line-bot-sdk
+requests
+beautifulsoup4
+pillow
