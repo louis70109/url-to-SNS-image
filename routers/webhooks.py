@@ -50,12 +50,11 @@ def message_text(event):
     i = requests.get(url=results[0]['src'])
     image_content = b''
     for chunk in i.iter_content():
-      image_content += chunk
+        image_content += chunk
     print('Image into binary')
     temp = tempfile.NamedTemporaryFile(suffix='.jpg')
     img_file_tmp_name = ''
     try:
-        
         temp.write(image_content)
         img_file_tmp_name = temp.name
         temp.seek(0)
@@ -65,11 +64,23 @@ def message_text(event):
         print('Temp path create fail.')
     
     my_image = Image.open(img_file_tmp_name)
-    title_font = ImageFont.truetype('zh-black.ttf', 200)
-    title_text = '123'
+    title_font = ImageFont.truetype('zh-black.ttf', 50)
+    title_text = '123' # Change Draw Text
     image_editable = ImageDraw.Draw(my_image)
     image_editable.text((15,15), title_text, (237, 230, 211), font=title_font)
     print('Draw image success.')
+
+    
+    # TODO: resize function
+    resize_image = my_image.resize((int(float(my_image.size[0])*0.3), int(float(my_image.size[1])*0.3)), Image.ANTIALIAS)
+    print('Resize done.')
+    new_image = Image.new('RGB',(1080, 1920), (250,250,250))
+    image1 = Image.open('white_ig.jpeg') # Change to no background PNG
+    new_image.paste(image1,(0,0))
+    new_image.paste(resize_image,(200,720))
+    new_image.save("merged_image.jpg","JPEG")
+    print("Get url image and change to IG size.")
+
     # my_image.save("result.jpg")
     # Save as a binary file to LINE Bot
     line_bot_api.reply_message(
